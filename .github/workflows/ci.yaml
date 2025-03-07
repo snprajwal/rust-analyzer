@@ -95,7 +95,10 @@ jobs:
 
       - name: Test
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest' || github.event_name == 'push'
-        run: cargo test ${{ env.USE_SYSROOT_ABI }} -- --nocapture --quiet
+        run: |
+          cargo test ${{ env.USE_SYSROOT_ABI }} -- --nocapture --quiet
+          # Fail if any files were modified by xtask
+          git diff --exit-code
 
       - name: Switch to stable toolchain
         run: |
